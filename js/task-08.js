@@ -1,33 +1,31 @@
-let input = document.querySelector('#boxes');
-const getRandom = item => Math.floor(Math.random() * Math.floor(item));
+const refs = {
+  input: document.querySelector('#controls'),
+  addButton: document.querySelector('button[data-action="render"]'),
+  clearButton: document.querySelector('button[data-action="destroy"]'),
+};
 
-const createBoxes = amount => {
-  let width = 30;
-  let height = 30;
+const randomRgb = num => Math.round(Math.random() * 256);
+
+function createBoxes(amount) {
+  const width = 30;
+  const height = 30;
   for (let i = 0; i < amount; i++) {
-    let div = document.createElement('div');
-    div.style.width = width + i * 10 + 'px';
-    div.style.height = height + i * 10 + 'px';
-    div.style.backgroundColor = `rgb(${getRandom(255)}, ${getRandom(
-      255,
-    )}, ${getRandom(255)})`;
-    input.appendChild(div);
+    const box = document.createElement('div');
+    box.style.width = width + i * 10 + 'px';
+    box.style.height = height + i * 10 + 'px';
+    box.style.backgroundColor = `rgb(${randomRgb()},${randomRgb()},${randomRgb()})`;
+    refs.input.append(box);
   }
-};
+}
 
-const destroyBoxes = () => {
-  let cont = document.querySelector('#boxes');
-  cont.textContent = '';
-};
+function destroyBoxes() {
+  const div = document.querySelectorAll('#controls div');
+  div.forEach(item => {
+    item.remove();
+  });
+}
 
-const addButton = document.querySelector(
-  '#controls button[data-action="render"]',
-);
-const removeButton = document.querySelector(
-  '#controls button[data-action="destroy"]',
-);
-
-addButton.addEventListener('click', event => {
+refs.addButton.addEventListener('click', event => {
   createBoxes(event.target.previousElementSibling.value);
 });
-removeButton.addEventListener('click', destroyBoxes);
+refs.clearButton.addEventListener('click', destroyBoxes);
